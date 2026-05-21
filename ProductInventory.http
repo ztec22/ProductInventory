@@ -1,6 +1,6 @@
 @ProductInventory_HostAddress = http://localhost:5136
 
-GET {{ProductInventory_HostAddress}}/weatherforecast/
+GET {{ProductInventory_HostAddress}}/product/
 Accept: application/json
 
 ###
