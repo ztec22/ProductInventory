@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ProductInventory.Models;
 
 namespace ProductInventory.Controllers;
 
@@ -6,7 +7,7 @@ namespace ProductInventory.Controllers;
 [Route("[controller]")]
 public class ProductController : ControllerBase
 {
-    private static readonly Product[] products =
+    static private List<Product> products =
     [
         new Product {
             Id = 1,
@@ -37,9 +38,60 @@ public class ProductController : ControllerBase
         },
     ];
 
-    [HttpGet(Name = "GetProducts")]
-    public IEnumerable<Product> Get()
+    [HttpGet]
+    public ActionResult<List<Product>> GetProducts()
     {
-        return products;
+        return Ok(products);
+    }
+
+    [HttpGet("{id}")]
+    public ActionResult<Product> GetProductById(int id)
+    {
+        var product = products.Find(p => p.Id == id);
+        if (product == null){
+            return NotFound();
+        }
+        
+        return Ok(product); 
+    }
+
+    [HttpPost]
+    public ActionResult<Product> CreateProduct(Product product)
+    {
+        if(product == null){
+            return BadRequest();
+        }
+        
+        products.Add(product);
+        return CreatedAtAction(nameof(GetProductById), new {id = product.Id }, product);
+    }
+
+    [HttpPut("{id}")]
+    public ActionResult UpdateProduct(int id, Product updatedProduct)
+    {
+        var product = products.Find(p => p.Id == id);
+        if (product == null){
+            return NotFound();
+        }
+
+        product.Name = updatedProduct.Name;
+        product.Category = updatedProduct.Category;
+        product.Brand = updatedProduct.Brand;
+        product.Vendor = updatedProduct.Vendor;
+        product.Price = updatedProduct.Price;
+        product.Amount = updatedProduct.Amount;
+        
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public ActionResult DeleteProduct(int id)
+    {
+        var product = products.Find(p => p.Id == id);
+        if(product != null){
+            products.Remove(product);
+        }
+        
+        return NoContent();
     }
 }
