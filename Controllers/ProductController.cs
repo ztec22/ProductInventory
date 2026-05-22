@@ -7,47 +7,23 @@ namespace ProductInventory.Controllers;
 [Route("[controller]")]
 public class ProductController : ControllerBase
 {
-    static private List<Product> products =
-    [
-        new Product {
-            Id = 1,
-            Name = "Mouse",
-            Category = "Electronics",
-            Brand = "Brand 1",
-            Vendor = "Vendor 1",
-            Price = 6.5,
-            Amount = 1,
-        },
-        new Product {
-            Id = 2,
-            Name = "Keyboard",
-            Category = "Electronics",
-            Brand = "Brand 2",
-            Vendor = "Vendor 2",
-            Price = 9.5,
-            Amount = 1,
-        },
-        new Product {
-            Id = 3,
-            Name = "Screen",
-            Category = "Electronics",
-            Brand = "Brand 3",
-            Vendor = "Vendor 3",
-            Price = 120.6,
-            Amount = 1,
-        },
-    ];
+    private readonly ProductContext _context;
+
+    public ProductController(ProductContext context)
+    {
+        _context = context;
+    }
 
     [HttpGet]
     public ActionResult<List<Product>> GetProducts()
-    {
-        return Ok(products);
+    {   
+        return Ok(_context.Products.ToList());
     }
 
     [HttpGet("{id}")]
     public ActionResult<Product> GetProductById(int id)
     {
-        var product = products.Find(p => p.Id == id);
+        var product = _context.Products.Find(id);
         if (product == null){
             return NotFound();
         }
@@ -62,14 +38,16 @@ public class ProductController : ControllerBase
             return BadRequest();
         }
         
-        products.Add(product);
+        _context.Products.Add(product);
+        _context.SaveChanges();
+        
         return CreatedAtAction(nameof(GetProductById), new {id = product.Id }, product);
     }
 
     [HttpPut("{id}")]
     public ActionResult UpdateProduct(int id, Product updatedProduct)
     {
-        var product = products.Find(p => p.Id == id);
+        var product = _context.Products.Find(id);
         if (product == null){
             return NotFound();
         }
@@ -80,6 +58,9 @@ public class ProductController : ControllerBase
         product.Vendor = updatedProduct.Vendor;
         product.Price = updatedProduct.Price;
         product.Amount = updatedProduct.Amount;
+
+        _context.Products.Update(product);
+        _context.SaveChanges();
         
         return NoContent();
     }
@@ -87,9 +68,10 @@ public class ProductController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult DeleteProduct(int id)
     {
-        var product = products.Find(p => p.Id == id);
+        var product = _context.Products.Find(id);
         if(product != null){
-            products.Remove(product);
+            _context.Products.Remove(product);
+            _context.SaveChanges();
         }
         
         return NoContent();
