@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ProductInventory.Data;
 using ProductInventory.Models;
+using ProductInventory.Services;
 
 namespace ProductInventory.Controllers;
 
@@ -9,23 +9,23 @@ namespace ProductInventory.Controllers;
 [Route("[controller]")]
 public class ProductController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly ProductService  _productService;
 
-    public ProductController(AppDbContext context)
+    public ProductController(AppDbContext context, ProductService  productService)
     {
-        _context = context;
+        _productService =  productService;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<Product>>> GetProducts()
     {   
-        return Ok(await _context.Products.ToListAsync());
+        return Ok(await _productService.GetProducts());
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> GetProductById(int id)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _productService.GetProductById(id);
         if (product == null){
             return NotFound();
         }
@@ -34,14 +34,13 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Product>> CreateProduct(Product product)
+    public async Task<ActionResult<Product>> CreateProduct(Product productRequest)
     {
-        if(product == null){
+        if(productRequest == null){
             return BadRequest();
         }
         
-        _context.Products.Add(product);
-        await _context.SaveChangesAsync();
+        Product product = await _productService.CreateProduct(productRequest);
         
         return CreatedAtAction(nameof(GetProductById), new {id = product.Id }, product);
     }
@@ -49,19 +48,10 @@ public class ProductController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateProduct(int id, Product updatedProduct)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _productService.UpdateProduct(id, updatedProduct);
         if (product == null){
             return NotFound();
         }
-
-        product.Name = updatedProduct.Name;
-        product.Category = updatedProduct.Category;
-        product.Brand = updatedProduct.Brand;
-        product.Vendor = updatedProduct.Vendor;
-        product.Price = updatedProduct.Price;
-        product.Amount = updatedProduct.Amount;
-
-        await _context.SaveChangesAsync();
         
         return NoContent();
     }
@@ -69,12 +59,8 @@ public class ProductController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteProduct(int id)
     {
-        var product = await _context.Products.FindAsync(id);
-        if(product != null){
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-        }
-        
+        await _productService.DeleteProduct(id);
+
         return NoContent();
     }
 }
