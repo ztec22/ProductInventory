@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ProductInventory.Models;
+using ProductInventory.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 //Register Database
-builder.Services.AddDbContext<ProductContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )

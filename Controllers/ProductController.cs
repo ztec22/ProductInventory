@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProductInventory.Data;
 using ProductInventory.Models;
 
 namespace ProductInventory.Controllers;
@@ -8,9 +9,9 @@ namespace ProductInventory.Controllers;
 [Route("[controller]")]
 public class ProductController : ControllerBase
 {
-    private readonly ProductContext _context;
+    private readonly AppDbContext _context;
 
-    public ProductController(ProductContext context)
+    public ProductController(AppDbContext context)
     {
         _context = context;
     }

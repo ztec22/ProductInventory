@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using ProductInventory.Models;
 
-namespace ProductInventory.Models;
+namespace ProductInventory.Data;
 
-public class ProductContext : DbContext
+public class AppDbContext : DbContext
 {
-    public ProductContext(DbContextOptions<ProductContext> options)
+    public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
     }

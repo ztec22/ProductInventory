@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using ProductInventory.Data;
 using ProductInventory.Models;
 
 #nullable disable
 
 namespace ProductInventory.Migrations
 {
-    [DbContext(typeof(ProductContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20260522070847_AddProductData")]
     partial class AddProductData
     {
