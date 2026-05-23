@@ -20,4 +20,9 @@
     <PackageReference Include="NSwag.AspNetCore" Version="14.7.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="ProductInventoryTests/**/*.cs" />
+    <None Remove="ProductInventoryTests/**/*.cs" />
+  </ItemGroup>
+
 </Project>
