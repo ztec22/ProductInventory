@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using ProductInventory.Data;
 using ProductInventory.Models;
 using ProductInventory.Services;
 

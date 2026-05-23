@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using ProductInventory.Data;
 using ProductInventory.Models;
 using ProductInventory.Repositories;
 
