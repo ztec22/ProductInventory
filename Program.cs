@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProductInventory.Data;
+using ProductInventory.Repositories;
 using ProductInventory.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 //Register Database
 builder.Services.AddDbContext<AppDbContext>(options =>
