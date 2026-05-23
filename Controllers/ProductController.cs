@@ -11,7 +11,7 @@ public class ProductController : ControllerBase
 {
     private readonly ProductService  _productService;
 
-    public ProductController(AppDbContext context, ProductService  productService)
+    public ProductController(ProductService  productService)
     {
         _productService =  productService;
     }

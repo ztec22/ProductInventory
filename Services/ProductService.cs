@@ -1,66 +1,48 @@
 using Microsoft.EntityFrameworkCore;
 using ProductInventory.Data;
 using ProductInventory.Models;
+using ProductInventory.Repositories;
 
 namespace ProductInventory.Services;
 
 
 public class ProductService
 {
-    private readonly AppDbContext _dbContext;
+    private readonly IProductRepository _productRepository;
 
-    public ProductService(AppDbContext dbContext)
+    public ProductService(IProductRepository productRepository)
     {
-        _dbContext = dbContext;
+        _productRepository = productRepository;
     }
 
     public async Task<List<Product>> GetProducts()
     {   
-        return await _dbContext.Products.ToListAsync();
+        return await _productRepository.GetProducts();
     }
 
    
     public async Task<Product?> GetProductById(int id)
     {
-        return await _dbContext.Products.FindAsync(id);
+        return await _productRepository.GetProductById(id);
         
     }
 
 
     public async Task<Product> CreateProduct(Product product)
     {
-        _dbContext.Products.Add(product);
-        await _dbContext.SaveChangesAsync();
+        await _productRepository.CreateProduct(product);
         
         return product;
     }
 
     public async Task<Product?> UpdateProduct(int id, Product updatedProduct)
     {
-        var product = await _dbContext.Products.FindAsync(id);
-        if (product == null){
-            return null;
-        }
-
-        product.Name = updatedProduct.Name;
-        product.Category = updatedProduct.Category;
-        product.Brand = updatedProduct.Brand;
-        product.Vendor = updatedProduct.Vendor;
-        product.Price = updatedProduct.Price;
-        product.Amount = updatedProduct.Amount;
-
-        await _dbContext.SaveChangesAsync();
-        
-        return product;
+        return await _productRepository.UpdateProduct(id, updatedProduct);
     }
 
 
     public async Task DeleteProduct(int id)
     {
-        var product = await _dbContext.Products.FindAsync(id);
-        if(product != null){
-            _dbContext.Products.Remove(product);
-            await _dbContext.SaveChangesAsync();
-        }
+        await _productRepository.DeleteProduct(id);
     }
 }
