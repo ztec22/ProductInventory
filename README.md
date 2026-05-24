@@ -1,11 +1,11 @@
 # Product-Inventory
 
 ## Sobre el proyecto
-Es un proyecto para gestionar para gestionar inventario de productos.
+Es un proyecto para gestionar productos del inventario.
 
 ## Tecnologías
 - **.NET 10**
-- **EntityFramework Core** y **PosgresSQL**
+- **EntityFramework Core** y **PostgreSQL**
 - Tests con **Xunit**
 - **Docker / Docker Compose**
 - **Swagger / OpenAPI**
@@ -75,5 +75,5 @@ dotnet ef database update
 
 - Crear tests
 ```
-dotnet new xunit
+dotnet new xunit -n ProductInventoryTests
 ```
