@@ -18,7 +18,7 @@ services:
       timeout: 10s
 
   product_inventory:
-    image: product-inventory:latest
+    image: ghcr.io/ztec22/product-inventory:latest
     ports:
       - "8080:8080"
     environment:
