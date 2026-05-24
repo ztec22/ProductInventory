@@ -1,0 +1,58 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+      - 'README.md'
+      - 'docker-compose.yml'
+      - 'local-deploy.yml'
+
+permissions:
+  contents: read
+  packages: write
+  
+jobs:
+  build-job:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+      
+    - name: Test
+      run: dotnet test ProductInventoryTests/ --no-build --verbosity normal
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: "*"
+        
+  docker-build-job:
+      needs: build-job
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: Download build assets
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          
+      - name: Login container registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+        
+      - name: Build and Push Docker image
+        run: |
+          docker build . -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
