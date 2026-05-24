@@ -7,6 +7,10 @@ on:
       - 'README.md'
       - 'docker-compose.yml'
       - 'local-deploy.yml'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.actor }}/product-inventory:latest
   
 permissions:
   contents: read
@@ -42,10 +46,6 @@ jobs:
   docker-build-job:
       needs: build-job
       runs-on: ubuntu-latest
-
-      env:
-        REGISTRY: ghcr.io
-        IMAGE_NAME: ${{ github.actor }}/product-inventory:latest
   
       steps:
       - name: Download build assets
