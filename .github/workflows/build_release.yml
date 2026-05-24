@@ -8,6 +8,10 @@ on:
       - 'docker-compose.yml'
       - 'local-deploy.yml'
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.actor }}/job-applications:latest
+  
 permissions:
   contents: read
   packages: write
