@@ -6,7 +6,7 @@ Es un proyecto para gestionar productos del inventario.
 ## Tecnologías
 - **.NET 10**
 - **EntityFramework Core** y **PostgreSQL**
-- Tests con **Xunit**
+- Tests Unitarios y de Integración con **Xunit** y **Testcontainers**
 - **Docker / Docker Compose**
 - **Swagger / OpenAPI**
 - CI/CD con **GitHub Actions**
